@@ -1,5 +1,6 @@
 const { verify } = require('jsonwebtoken');
 require('dotenv').config();
+
 const validateToken = (req, res, next) => {
     try {
         const accessToken = req.header("Authorization").split(" ")[1];
@@ -15,3 +16,4 @@ const validateToken = (req, res, next) => {
     }
 }
 module.exports = { validateToken };
+

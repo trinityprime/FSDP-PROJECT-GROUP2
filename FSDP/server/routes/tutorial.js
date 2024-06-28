@@ -33,8 +33,6 @@ router.get("/", async (req, res) => {
             { description: { [Op.like]: `%${search}%` } }
         ];
     }
-    // You can add condition for other columns here
-    // e.g. condition.columnName = value;
 
     let list = await Tutorial.findAll({
         where: condition,

@@ -22,9 +22,18 @@ app.use("/tutorial", tutorialRoute);
 const userRoute = require('./routes/user');
 app.use("/user", userRoute);
 
+const profileRoute = require('./routes/profile')
+app.use('/profile', profileRoute)
+
+const adminRoute = require('./routes/admin')
+app.use('/admin', adminRoute)
+
+const initializeAdminAccount = require('./initializeAdmin'); 
+
 const db = require('./models');
 db.sequelize.sync({ alter: true })
-    .then(() => {
+    .then(async () => {
+        await initializeAdminAccount();
         let port = process.env.APP_PORT;
         app.listen(port, () => {
             console.log(`⚡ Sever running on http://localhost:${port}`);
@@ -33,3 +42,4 @@ db.sequelize.sync({ alter: true })
     .catch((err) => {
         console.log(err);
     });
+

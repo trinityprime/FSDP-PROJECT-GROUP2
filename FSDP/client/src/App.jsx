@@ -6,13 +6,15 @@ import { useState, useEffect } from 'react';
 import UserContext from './contexts/UserContext';
 import MyTheme from './themes/MyTheme';
 import Tutorials from './pages/Tutorials';
+import AddUser from './pages/AddUser';
 import AddTutorial from './pages/AddTutorial';
 import EditTutorial from './pages/EditTutorial';
+import EditUser from './pages/EditUser';
 import MyForm from './pages/MyForm';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import http from './http';
-
+import Profile from './pages/Profile';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -50,24 +52,11 @@ function App() {
                 <Link to="/tutorials" style={{ marginLeft: 'auto' }}>
                   <Typography>Tutorials</Typography>
                 </Link>
-                <Link to="/events" style={{ marginLeft: '15px' }}>
-                  <Typography>Events</Typography>
-                </Link>
-                <Link to="/courses" style={{ marginLeft: '15px' }}>
-                  <Typography>Courses</Typography>
-                </Link>
-                <Link to="/incident_report" style={{ marginLeft: '15px' }}>
-                  <Typography>Incident Report</Typography>
-                </Link>
-                <Link to="/about_us" style={{ marginLeft: '15px' }}>
-                  <Typography>About Us</Typography>
-                </Link>
-                <Link to="/contact_us" style={{ marginLeft: '15px' }}>
-                  <Typography>Contact Us</Typography>
-                </Link>
                 {user && (
                   <>
-                    <Typography>{user.name}</Typography>
+                    <Link to="/profile" style={{ marginLeft: '15px' }}>
+                      <Typography>{user.name}</Typography>
+                    </Link>
                     <Button onClick={logout}>Logout</Button>
                   </>
                 )}
@@ -90,10 +79,13 @@ function App() {
               <Route path={"/"} element={<Tutorials />} />
               <Route path={"/tutorials"} element={<Tutorials />} />
               <Route path={"/addtutorial"} element={<AddTutorial />} />
+              <Route path={"/adduser"} element={<AddUser />} />
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
+              <Route path={"/edituser/:id"} element={<EditUser />} />
               <Route path={"/form"} element={<MyForm />} />
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
+              <Route path={"/profile"} element={<Profile />} />
             </Routes>
           </Container>
         </ThemeProvider>

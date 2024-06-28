@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem, IconButton, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -10,7 +10,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import InputMask from 'react-input-mask';
 import dayjs from 'dayjs';
 
-function Register() {
+function AddUser() {
     const navigate = useNavigate();
     const [selectedRole, setSelectedRole] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -59,12 +59,12 @@ function Register() {
                     dob: dayjs(values.dob, 'DD/MM/YYYY').toISOString(),
                     role: selectedRole,
                 };
-                const response = await http.post("/user/register", data);
+                const response = await http.post("/user", data);
                 toast.success(response.data.message);
                 console.log(response.data);
-                navigate("/login");
+                navigate("/profile"); 
             } catch (err) {
-                toast.error(err.response.data.message || 'Registration failed');
+                toast.error(err.response.data.message || 'Failed to add user');
             }
         }
     });
@@ -85,7 +85,7 @@ function Register() {
             alignItems: 'center'
         }}>
             <Typography variant="h5" sx={{ my: 2 }}>
-                Register
+                Add New User
             </Typography>
 
             <Box component="form" sx={{ maxWidth: '500px' }} onSubmit={formik.handleSubmit}>
@@ -182,11 +182,12 @@ function Register() {
                         <MenuItem value="">Select role</MenuItem>
                         <MenuItem value="volunteer">Volunteer</MenuItem>
                         <MenuItem value="organization">Organization</MenuItem>
+                        <MenuItem value="admin">Admin</MenuItem> 
                     </Select>
                 </FormControl>
 
                 <Button fullWidth variant="contained" sx={{ mt: 2 }} type="submit">
-                    Register
+                    Add User
                 </Button>
             </Box>
             <ToastContainer />
@@ -194,4 +195,4 @@ function Register() {
     );
 }
 
-export default Register;
+export default AddUser;

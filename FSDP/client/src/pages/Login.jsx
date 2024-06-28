@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { Box, Typography, TextField, Button } from '@mui/material';
+import React, { useContext, useState } from 'react';
+import { Box, Typography, TextField, Button, Link, IconButton, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -7,11 +7,12 @@ import http from '../http';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import UserContext from '../contexts/UserContext';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 function Login() {
-
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -37,14 +38,17 @@ function Login() {
         .then((res) => {
           localStorage.setItem("accessToken", res.data.accessToken);
           setUser(res.data.user);
-          navigate("/");
-          window.location.reload();
+          navigate("/profile");
         })
-        .catch(function (err) {
+        .catch((err) => {
           toast.error(`${err.response.data.message}`);
         });
     }
   });
+
+  const handlePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <Box sx={{
@@ -52,7 +56,6 @@ function Login() {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center'
-
     }}>
       <Typography variant="h5" sx={{ my: 2 }}>
         Login
@@ -71,21 +74,37 @@ function Login() {
         <TextField
           fullWidth margin="dense" autoComplete="off"
           label="Password"
-          name="password" type="password"
+          name="password"
+          type={showPassword ? 'text' : 'password'}
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handlePasswordVisibility} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
         />
         <Button fullWidth variant="contained" sx={{ mt: 2 }}
           type="submit">
           Login
         </Button>
+
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Typography variant="body3">
+            Don't have an account? <Link href="/register">Register here</Link>
+          </Typography>
+        </Box>
       </Box>
       <ToastContainer />
     </Box>
   )
 }
 
-export default Login
+export default Login;
